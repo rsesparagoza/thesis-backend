@@ -1,5 +1,6 @@
 const jwt =  require('jsonwebtoken');
 const User = require('../models/user');
+const TOKEN_EXPIRATION = '1m';
 
 
 exports.createUser =  async (req, res) => {
@@ -48,7 +49,7 @@ exports.userSignIn = async (req, res) => {
         message: 'Username and Password do not match'})
         
         const token = jwt.sign({userId: user._id},
-            process.env.JWT_SECRET, {expiresIn: '1d'})
+            process.env.JWT_SECRET, {expiresIn: TOKEN_EXPIRATION})
     res.json({success: true, user, token});
 };
 
@@ -60,7 +61,7 @@ exports.userSignIn = async (req, res) => {
         return res.json({
             success: false,
             message: 'Email already in use'
-        });
+        }); 
         }
         const user = new User({
             fullname,
